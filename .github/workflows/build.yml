@@ -9,6 +9,8 @@ jobs:
   json_build:
     name: ubuntu build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # needed to create a release
 
     steps:
       - name: Download Repository
