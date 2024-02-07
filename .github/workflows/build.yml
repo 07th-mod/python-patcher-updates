@@ -1,0 +1,29 @@
+name: Build updates.json file
+
+# Run this workflow on every push or pull request
+on:
+  push:
+
+# Docs on sharing data between jobs (between VMs): https://help.github.com/en/actions/configuring-and-managing-workflows/persisting-workflow-data-using-artifacts#passing-data-between-jobs-in-a-workflow
+jobs:
+  json_build:
+    name: ubuntu build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Repository
+        uses: actions/checkout@v3
+
+      - name: Run Build and Deploy Script
+        run: python build.py
+
+      - name: Release (tag)
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/') # only publish tagged commits
+        with:
+          files: |
+            *.json
+          # draft: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
