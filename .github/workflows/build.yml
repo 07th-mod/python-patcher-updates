@@ -3,6 +3,8 @@ name: Build updates.json file
 # Run this workflow on every push or pull request
 on:
   push:
+    branches:
+      - main
 
 # Docs on sharing data between jobs (between VMs): https://help.github.com/en/actions/configuring-and-managing-workflows/persisting-workflow-data-using-artifacts#passing-data-between-jobs-in-a-workflow
 jobs:
@@ -19,10 +21,14 @@ jobs:
       - name: Run Build and Deploy Script
         run: python build.py
 
+      - name: Set current date as env variable
+        run: echo "NOW=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_ENV
+
       - name: Release
         uses: softprops/action-gh-release@v1
-        # if: startsWith(github.ref, 'refs/tags/') # only publish tagged commits
+        #if: startsWith(github.ref, 'refs/tags/') # only publish tagged commits
         with:
+          tag_name: ${{ env.NOW }}
           files: |
             *.json
           # draft: true
