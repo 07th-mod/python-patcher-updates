@@ -19,9 +19,9 @@ jobs:
       - name: Run Build and Deploy Script
         run: python build.py
 
-      - name: Release (tag)
+      - name: Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/') # only publish tagged commits
+        # if: startsWith(github.ref, 'refs/tags/') # only publish tagged commits
         with:
           files: |
             *.json
